@@ -45,14 +45,14 @@
         </div>
         @if(Auth::user())
           <div>
-            <a class="nav-link text-white" aria-current="page" href="/">My Car</a>
+            <a class="nav-link text-white" aria-current="page" href="/mycar">My Car</a>
           </div>
         @endif
       </div>
       @if(Auth::user())
       <div class="d-flex">
         <div>
-          <a class="nav-link text-white" aria-current="page" href="/">Add Car</a>
+          <a class="nav-link text-white" aria-current="page" href="/addcar">Add Car</a>
         </div>
         <div>
           <a class="nav-link text-white" aria-current="page" href="/">{{Auth::user()->name}}</a>

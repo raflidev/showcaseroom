@@ -43,7 +43,12 @@ class ShowroomController extends Controller
             'tanggal_beli' => 'required',
             'deskripsi' => 'required',
             'status_pembayaran' => 'required',
+            'Foto' => 'mimes:jpeg,png,jpg',
         ]); 
+
+        $file = $request->file('Foto');
+        $filename = uniqid()."_".$file->getClientOriginalName();
+        $file->storeAs('public/',$filename);
 
         Showroom::create([
             'user_id' => Auth::user()->id,
@@ -52,9 +57,12 @@ class ShowroomController extends Controller
             'brand' => $request->merk,
             'purchase_date' => $request->tanggal_beli,
             'description' => $request->deskripsi,
-            'images' => $request->Foto,
+            'images' => $filename,
             'status' => $request->status_pembayaran,
         ]);
+
+
+
 
         return redirect('/')->with('success', 'Berhasil menambahkan mobil');
     }
@@ -90,7 +98,20 @@ class ShowroomController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $file = $request->file('Foto');
+        $filename = uniqid()."_".$file->getClientOriginalName();
+        $file->storeAs('public/',$filename);
+
+        Showroom::update([
+            'name' => $request->mobil,
+            'owner' => $request->pemilik,
+            'brand' => $request->merk,
+            'purchase_date' => $request->tanggal_beli,
+            'description' => $request->deskripsi,
+            'images' => $filename,
+            'status' => $request->status_pembayaran,
+        ]);
+        redirect('/mycar')->with('success', 'Mobil berhasil diupdate');
     }
 
     /**

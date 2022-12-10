@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ShowroomController;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,6 +30,16 @@ Route::get('/registrasi', function () {
 
 Route::get('/addcar', function () {
     return view('addcar');
+});
+
+Route::get('/mycar', function () {
+    $data = DB::table('showrooms')->get();
+    return view('mycar', ['data' => $data]);
+});
+
+Route::get('/detail/{id}', function ($id) {
+    $data = DB::table('showrooms')->where('id', $id)->first();
+    return view('detail', ['data' => $data]);
 });
 
 Route::post('/registrasi', [UserController::class, 'store']);

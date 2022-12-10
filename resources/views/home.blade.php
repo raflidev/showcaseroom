@@ -34,32 +34,53 @@
     }
     </style>
 </head>
-<body>
-    
-<nav class="navbar navbar-expand navbar-dark bg-primary">
-  <div class="container-fluid">
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-        <a class="nav-link active" aria-current="page" href="/WAD2022-FENI-1202200017/MODUL4_FENI/HomeSebelumLogin.php">Home</a>
-        <a class="nav-link active" aria-current="page" href="/WAD2022-FENI-1202200017/MODUL4_FENI/Login.php">Login</a>
+<body class="">
+
+<nav class="bg-primary text-white py-3">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="d-flex">
+        <div>
+          <a class="nav-link text-white active" aria-current="page" href="/">Home</a>
+        </div>
+        @if(Auth::user())
+          <div>
+            <a class="nav-link text-white" aria-current="page" href="/">My Car</a>
+          </div>
+        @endif
       </div>
+      @if(Auth::user())
+      <div class="d-flex">
+        <div>
+          <a class="nav-link text-white" aria-current="page" href="/">Add Car</a>
+        </div>
+        <div>
+          <a class="nav-link text-white" aria-current="page" href="/">{{Auth::user()->name}}</a>
+        </div>
+      </div>
+      @else
+      <div>
+        Login
+      </div>
+      @endif
     </div>
   </div>
 </nav>
 
-<section class="content">
+<section class="content container">
   <div class="row justify-content-center mx-auto d-flex align-items-center">
     <div class="col">
-      <h2><b class="card-title">Selamat Datang Di Show Room Feni </b></h2>   
+      @if(Auth::user())
+        <h2><b class="card-title">Selamat Datang Di Show Room {{Auth::user()->name}} </b></h2>   
+      @else
+        <h2><b class="card-title">Selamat Datang Di Show Room</b></h2>   
+      @endif
         <p class="card-text">At lacus vitae nulla sagitis scelerisque nisL. Pellentesque duis 
           <br>cursus vestibulum,facilisi ac,sed faucibus</br></p>
         <br></br>
         <br></br>
     <div class="display">
-      <img class="style="width: 105.43px; height: 30px; left: 120px; top: 729px;" src="foto\logo-ead.png" width="100" height="30" alt="card image">
+      <img class="style="width: 105.43px; height: 30px; left: 120px; top: 729px;" src="/foto/logo-ead.png" width="100" height="30" alt="card image">
       <br></br>
 
         <p class="nama" style="margin-left:150px; position: absolute">Feni_1202200017</p>

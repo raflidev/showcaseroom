@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Showroom;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ShowroomController extends Controller
 {
@@ -44,11 +45,11 @@ class ShowroomController extends Controller
             'deskripsi' => 'required',
             'status_pembayaran' => 'required',
             'Foto' => 'mimes:jpeg,png,jpg',
-        ]); 
+        ]);
 
         $file = $request->file('Foto');
-        $filename = uniqid()."_".$file->getClientOriginalName();
-        $file->storeAs('public/',$filename);
+        $filename = uniqid() . "_" . $file->getClientOriginalName();
+        $file->storeAs('public/', $filename);
 
         Showroom::create([
             'user_id' => Auth::user()->id,
@@ -98,20 +99,32 @@ class ShowroomController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $file = $request->file('Foto');
-        $filename = uniqid()."_".$file->getClientOriginalName();
-        $file->storeAs('public/',$filename);
+        $request->validate([
+            'nama_mobil' => 'required',
+            'pemilik_mobil' => 'required',
+            'merk_mobil' => 'required',
+            'tanggal_beli' => 'required',
+            'deskripsi' => 'required',
+            'status_pembayaran' => 'required',
+            'Foto' => 'mimes:jpeg,png,jpg',
+        ]);
 
-        Showroom::update([
-            'name' => $request->mobil,
-            'owner' => $request->pemilik,
-            'brand' => $request->merk,
+        $file = $request->file('Foto');
+        $filename = uniqid() . "_" . $file->getClientOriginalName();
+        $file->storeAs('public/', $filename);
+
+        $showroom = Showroom::find($id);
+        unlink("storage/$showroom->images");
+        $showroom->update([
+            'name' => $request->nama_mobil,
+            'owner' => $request->pemilik_mobil,
+            'brand' => $request->merk_mobil,
             'purchase_date' => $request->tanggal_beli,
             'description' => $request->deskripsi,
             'images' => $filename,
             'status' => $request->status_pembayaran,
         ]);
-        redirect('/mycar')->with('success', 'Mobil berhasil diupdate');
+        return redirect('/mycar')->with('success', 'Mobil berhasil diupdate');
     }
 
     /**
@@ -122,8 +135,9 @@ class ShowroomController extends Controller
      */
     public function destroy($id)
     {
-        $user = Showroom::find($id);
-        $user->delete();
+        $showroom = Showroom::find($id);
+        unlink("storage/$showroom->images");
+        $showroom->delete();
         return redirect('/mycar')->with('success', 'Mobil berhasil dihapus');
     }
 }

@@ -46,14 +46,14 @@
         border-radius: 5px;
 
         border: none;
-        
+
     }
-    
+
     </style>
 
 </head>
 <body>
-    
+
     <nav class="bg-primary text-white py-3">
         <div class="container">
           <div class="d-flex justify-content-between align-items-center">
@@ -68,22 +68,32 @@
               @endif
             </div>
             @if(Auth::user())
-            <div class="d-flex">
-              <div>
-                <a class="nav-link text-white" aria-current="page" href="/">Add Car</a>
+            <div class="d-flex gap-3">
+              <div class="">
+                <a class="btn bg-white text-primary" aria-current="page" href="/addcar">Add Car</a>
               </div>
               <div>
-                <a class="nav-link text-white active" aria-current="page" href="/">{{Auth::user()->name}}</a>
+                  <div class="btn-group">
+                      <button type="button" class="btn bg-white text-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                      {{Auth::user()->name}}
+                      </button>
+                      <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" href="/profile">Profile</a></li>
+                      <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                      </ul>
+                  </div>
               </div>
             </div>
             @else
             <div>
-              Login
+              <a class="nav-link text-white" aria-current="page" href="/login">Login</a>
             </div>
             @endif
           </div>
         </div>
-      </nav><br></br>
+      </nav>
+
+      <br></br>
 
 <div class="container">
     <h5><strong>MyShowRoom</h5></strong>
@@ -117,7 +127,7 @@
     </div>
   </div>
 </div><br></br> --}}
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 <footer>
     <div>
         {{-- <p>Jumlah Mobil: <?php echo mysqli_num_rows($sql)?></p> --}}

@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\ShowroomController;
 use App\Http\Controllers\UserController;
+use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
@@ -39,10 +42,19 @@ Route::get('/mycar', function () {
 
 Route::get('/detail/{id}', function ($id) {
     $data = DB::table('showrooms')->where('id', $id)->first();
-    return view('detail', ['data' => $data]);
+    $tanggal = Carbon::parse($data->purchase_date)->format('m/d/Y');
+    return view('detail', ['data' => $data, 'tanggal' => $tanggal]);
+});
+
+Route::get('/profile', function () {
+    $data = User::find(Auth::user()->id);
+    return view('profile', ['data' => $data]);
 });
 
 Route::post('/registrasi', [UserController::class, 'store']);
 Route::post('/login', [UserController::class, 'login']);
+Route::get('/logout', [UserController::class, 'logout']);
 Route::post('/addcar', [ShowroomController::class, 'store']);
-
+Route::put('/detail/{id}', [ShowroomController::class, 'update']);
+Route::get('/delete/{id}', [ShowroomController::class, 'destroy']);
+Route::put('/profile', [UserController::class, 'update']);

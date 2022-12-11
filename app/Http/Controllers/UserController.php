@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -91,9 +92,29 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $request->validate([
+            'email' => 'required',
+            'nama' => 'required',
+            'no_hp' => 'required',
+            'password' => 'required',
+            'repassword' => 'required|same:password',
+        ]);
+        if (Hash::check($request->password, Auth::user()->password)) {
+            User::where('id', Auth::user()->id)->update([
+                'email' => $request->email,
+                'no_hp' => $request->no_hp,
+                'password' => bcrypt($request->password),
+                'name' => $request->nama,
+            ]);
+
+            return redirect('/')->with('success', 'Data berhasil diubah');
+        } else {
+            return back()->withErrors([
+                'wrong' => 'Password anda salah',
+            ]);
+        }
     }
 
     /**
@@ -105,5 +126,11 @@ class UserController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function logout()
+    {
+        Auth::logout();
+        return redirect('/')->with('success', 'Berhasil Logout');
     }
 }

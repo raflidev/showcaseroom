@@ -44,9 +44,9 @@
         border-radius: 5px;
 
         border: none;
-        
+
     }
-    
+
     </style>
 
 <body>
@@ -64,30 +64,42 @@
               @endif
             </div>
             @if(Auth::user())
-            <div class="d-flex">
-              <div>
-                <a class="nav-link text-white" aria-current="page" href="/addcar">Add Car</a>
+            <div class="d-flex gap-3">
+              <div class="">
+                <a class="btn bg-white text-primary" aria-current="page" href="/addcar">Add Car</a>
               </div>
               <div>
-                <a class="nav-link text-white" aria-current="page" href="/">{{Auth::user()->name}}</a>
+                  <div class="btn-group">
+                      <button type="button" class="btn bg-white text-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                      {{Auth::user()->name}}
+                      </button>
+                      <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" href="/profile">Profile</a></li>
+                      <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                      </ul>
+                  </div>
               </div>
             </div>
             @else
             <div>
-              Login
+              <a class="nav-link text-white" aria-current="page" href="/login">Login</a>
             </div>
             @endif
           </div>
         </div>
-      </nav><br></br>
-        
+      </nav>
+      <br></br>
+
         <div class="container">
         <h2><b>{{ $data->name }}</b></h2>
         <p>Detail Mobil {{ $data->name }}</p>
         <div class='d-flex justify-content-center align-items-start gap-5 mt-5'>
-                <img src='{{ asset('storage/'.$data->images) }}' class="col-6" alt="No Image"></img>
+            <img src='{{ asset('storage/'.$data->images) }}' class="col-6" alt="No Image"></img>
             <div class="col-6">
-                <form enctype='multipart/form-data'>
+                <form enctype='multipart/form-data' method="POST">
+                    @csrf
+                    @method("PUT")
+                    <input type="hidden" name="id" value="{{ $data->id }}">
                     <div class="mb-3">
                         <label for="nama_mobil"><b>Nama Mobil</b></label>
                         <input type="text" name="nama_mobil" class="form-control form-control-readonly" value="{{ $data->name}}" readonly>
@@ -102,26 +114,37 @@
                     </div>
                     <div class="mb-3">
                         <label for="tanggal"><b>Tanggal Beli</b></label>
-                        <input type="date" name="tanggal_beli" class="form-control" placeholder="mm/dd/yyyy" value="{{ date_format($data->purchase_date, 'dd/mm/yyyy')}}" readonly>
+                        <input type="date" id='tanggal' name="tanggal_beli" class="form-control">
                     </div>
                     <div class="mb-3">
-                        <label for="Deskripsi"><b>Deskripsi</b></label>
-                        <textarea class="form-control" rows="3" name="Deskripsi" readonly>{{ $data->description}}</textarea>
+                        <label for="deskripsi"><b>Deskripsi</b></label>
+                        <textarea class="form-control" rows="3" name="deskripsi" readonly>{{ $data->description}}</textarea>
                     </div>
                     <div class="mb-3">
                         <label for="Foto"><b>Foto</b></label>
-                        {{-- <input type="file" name="Foto" id="Foto"  class="form-control" value="" readonly><span>{{ $data->foto_mobil}}</span> --}}
+                        <input type="file" name="Foto" id="Foto"  class="form-control" value="">
                     </div>
                     <div class="mb-3">
-                        <label for="Status_Pembayaran"><b>Status Pembayaran</b></label>
+                        <label for="status_pembayaran"><b>Status Pembayaran</b></label>
                         <div class="mb-3">
-                            <input type="radio" name="Status_Pembayaran" id="Status_Pembayaran" value="Lunas"  readonly>
-                            <label for="Lunas">Lunas</label>
-                            <input type="radio" name="Status_Pembayaran" id="Status_Pembayaran" value="Belum Lunas"  readonly>
-                            <label for="Belum Lunas">Belum Lunas</label>
+                            @if($data->status == "Lunas")
+                                <input type="radio" name="status_pembayaran" id="status_pembayaran" value="Lunas"  checked  readonly>
+                                <label for="Lunas">Lunas</label>
+                            @else
+                                <input type="radio" name="status_pembayaran" id="status_pembayaran" value="Belum-Lunas" checked  readonly>
+                                <label for="Belum Lunas">Belum Lunas</label>
+                            @endif
                         </div>
                     </div>
-                    {{-- <a href='EditItem.php?id={{ $data->id_mobil}}' button class='btn btn-primary' type='Edit'>Edit</button></a><br></br> --}}  
+                    <button type="submit" class='btn btn-primary'>Edit</button>
+                    <br></br>
                 </form>
             </div>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+            <script>
+                var date = new Date()"<?php echo"$tanggal"?>";
+                console.log(date);
+                var currentDate = date.toISOString().substring(0,10);
+                document.getElementById('tanggal').value = currentDate;
+            </script>
         </div>

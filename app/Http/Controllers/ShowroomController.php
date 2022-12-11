@@ -122,6 +122,8 @@ class ShowroomController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = Showroom::find($id);
+        $user->delete();
+        return redirect('/mycar')->with('success', 'Mobil berhasil dihapus');
     }
 }

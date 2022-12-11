@@ -60,7 +60,7 @@
       </div>
       @else
       <div>
-        Login
+        <a class="nav-link text-white" aria-current="page" href="/login">Login</a>
       </div>
       @endif
     </div>
